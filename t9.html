@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEMA 09 - Encapsulamento e Métodos Modificadores/Acessores</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            border-radius: 24px;
+            padding: 35px;
+            margin-bottom: 25px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .badge-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 20px;
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            border-radius: 40px;
+        }
+
+        .tab-link {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 8px 18px;
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+
+        .tab-link:hover {
+            background: rgba(255,255,255,0.4);
+        }
+
+        .tab-link.active {
+            background: #11998e;
+        }
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            color: #11998e;
+            margin-bottom: 15px;
+            border-left: 5px solid #11998e;
+            padding-left: 15px;
+            font-size: 1.3rem;
+        }
+
+        .card h3 {
+            color: #0d7a6b;
+            margin: 18px 0 10px 0;
+            font-size: 1.1rem;
+        }
+
+        .card h4 {
+            color: #2c5364;
+            margin: 12px 0 8px 0;
+            font-size: 1rem;
+        }
+
+        .step {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 10px;
+            border-left: 4px solid #11998e;
+            font-size: 0.95rem;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: #11998e;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 24px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .code-block {
+            position: relative;
+            background: #1e1e2e;
+            color: #c9d1d9;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', monospace;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .code-block pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: #11998e;
+            color: white;
+            border: none;
+            padding: 3px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 10px;
+        }
+
+        .copy-btn:hover {
+            background: #0d7a6b;
+        }
+
+        .copy-btn.copied {
+            background: #28a745;
+        }
+
+        .highlight {
+            padding: 10px 14px;
+            border-radius: 10px;
+            border-left: 4px solid #17a2b8;
+            margin: 10px 0;
+            font-size: 13px;
+        }
+
+        .info {
+            background: #d1ecf1;
+            border-left-color: #17a2b8;
+        }
+
+        .tip {
+            background: #fff3cd;
+            border-left-color: #ffc107;
+        }
+
+        .success {
+            background: #d4edda;
+            border-left-color: #28a745;
+        }
+
+        .warning {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 13px;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid #ddd;
+            padding: 8px 10px;
+            text-align: left;
+        }
+
+        .comparison-table th {
+            background: #11998e;
+            color: white;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .triade-box {
+            background: #e8f5e9;
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin: 10px 0;
+            border: 2px solid #11998e;
+        }
+
+        .triade-box strong {
+            color: #0d7a6b;
+        }
+
+        .btn-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #11998e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            border-radius: 0 0 18px 18px;
+        }
+
+        .footer p {
+            color: #1a1a2e;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .activity-badge {
+            display: inline-block;
+            background: #dc3545;
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+
+        .tree {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        .exemplo-saida {
+            background: #2c3e50;
+            color: #ecf0f1;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-family: monospace;
+            font-size: 12px;
+            margin: 5px 0;
+        }
+
+        .objetivo-box {
+            background: #e8f5e9;
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin: 8px 0;
+            border-left: 4px solid #11998e;
+        }
+
+        @media (max-width: 768px) {
+            .card { padding: 18px; }
+            .header h1 { font-size: 1.3rem; }
+            .tab-link { padding: 6px 12px; font-size: 0.7rem; }
+            .header { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- HEADER -->
+    <div class="header">
+        <h1>🔒 TEMA 09 - Encapsulamento</h1>
+        <p>Métodos Modificadores e Acessores | Getters e Setters</p>
+        <div class="badge-group">
+            <span class="badge">🔒 Encapsulamento</span>
+            <span class="badge">📝 Getters</span>
+            <span class="badge">✏️ Setters</span>
+            <span class="badge">🛡️ Proteção</span>
+        </div>
+    </div>
+
+    <!-- Navegação por abas -->
+    <div class="nav-tabs">
+        <button class="tab-link active" data-tab="config">📋 CONFIGURAÇÃO</button>
+        <button class="tab-link" data-tab="conceitos">📖 CONCEITOS</button>
+        <button class="tab-link" data-tab="exemplos">💻 EXEMPLOS</button>
+        <button class="tab-link" data-tab="desafios">🏆 DESAFIOS</button>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- TAB: CONFIGURAÇÃO -->
+    <!-- ============================================================ -->
+    <div id="config" class="tab-content active">
+        <div class="card">
+            <h2>🚀 Configuração do Projeto no NetBeans</h2>
+
+            <div class="step">
+                <span class="step-number">1</span> <strong>File → New Project</strong>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span> Escolha: <strong>Java with Ant</strong> → <strong>Java Application</strong>
+            </div>
+            <div class="step">
+                <span class="step-number">3</span> <strong>Project Name:</strong> <code>Tema09Encapsulamento</code>
+            </div>
+            <div class="step">
+                <span class="step-number">4</span> Marque: <strong>✓ Create Main Class</strong>
+            </div>
+            <div class="step">
+                <span class="step-number">5</span> <strong>Main Class:</strong> <code>tema09.Main</code>
+            </div>
+            <div class="step">
+                <span class="step-number">6</span> Clique em <strong>Finish</strong>
+            </div>
+
+            <div class="tree">
+                📁 Tema09Encapsulamento<br>
+                &nbsp;&nbsp;└── 📁 Source Packages<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── 📁 tema09<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 Main.java
+            </div>
+
+            <div class="highlight tip">
+                💡 <strong>DICA:</strong> A Main.java pode ficar vazia. Vamos criar classes SEPARADAS para cada exemplo e desafio!
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📁 Como criar as classes</h2>
+            <div class="step">
+                <span class="step-number">1</span> Botão direito na pasta <strong>tema09</strong> → <strong>New → Java Class</strong>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span> Digite o nome da classe (ex: <code>ExemploAluno</code>)
+            </div>
+            <div class="step">
+                <span class="step-number">3</span> Cole o código do exemplo
+            </div>
+            <div class="step">
+                <span class="step-number">4</span> Execute: botão direito → <strong>Run File</strong> (ou Shift + F6)
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- TAB: CONCEITOS -->
+    <!-- ============================================================ -->
+    <div id="conceitos" class="tab-content">
+        <div class="card">
+            <h2>📖 O que é Encapsulamento?</h2>
+            <p><strong>Encapsulamento</strong> é o princípio da POO que consiste em <strong>ocultar</strong> os detalhes internos de uma classe e fornecer uma <strong>interface controlada</strong> para acessar e modificar seus atributos.</p>
+
+            <div class="triade-box">
+                <strong>📚 TRÍADE DIDÁTICA:</strong>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li><strong>CONCEITO:</strong> Ocultar dados internos, expondo apenas o necessário.</li>
+                    <li><strong>OBJETIVO:</strong> Proteger dados e garantir integridade.</li>
+                    <li><strong>MÉTODO:</strong> Atributos <code>private</code> + métodos <code>public</code> (getters/setters).</li>
+                </ul>
+            </div>
+
+            <div class="highlight info">
+                🎯 <strong>ANALOGIA:</strong>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>🔒 Uma <strong>mochila</strong> guarda seus pertences. Você só pode acessá-los abrindo o zíper.</li>
+                    <li>🏦 Um <strong>caixa eletrônico</strong> permite sacar dinheiro, mas você não vê o cofre interno.</li>
+                    <li>📱 Um <strong>smartphone</strong> tem botões e tela, mas você não vê os circuitos internos.</li>
+                </ul>
+            </div>
+
+            <h3>🔒 Como implementar encapsulamento em Java?</h3>
+            <div class="step">
+                <span class="step-number">1</span> Declare os atributos como <strong>private</strong>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span> Forneça métodos <strong>public</strong> para acessar (getters) e modificar (setters)
+            </div>
+
+            <h3>📊 Modificadores de Acesso</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr><th>Modificador</th><th>Acesso</th><th>Exemplo</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>private</strong></td><td>Apenas dentro da classe</td><td><code>private String nome;</code></td></tr>
+                    <tr><td><strong>default</strong></td><td>Dentro do mesmo pacote</td><td><code>String nome;</code></td></tr>
+                    <tr><td><strong>protected</strong></td><td>Pacote + subclasses</td><td><code>protected String nome;</code></td></tr>
+                    <tr><td><strong>public</strong></td><td>Qualquer lugar</td><td><code>public String nome;</code></td></tr>
+                </tbody>
+            </table>
+
+            <h3>📝 Getters e Setters</h3>
+            <div class="code-block">
+                <pre><code>public class Pessoa {
+    // Atributo privado
+    private String nome;
+
+    // Getter - Lê o valor
+    public String getNome() {
+        return nome;
+    }
+
+    // Setter - Define o valor (com validação)
+    public void setNome(String nome) {
+        if (nome != null && !nome.trim().isEmpty()) {
+            this.nome = nome;
+        } else {
+            System.out.println("Nome inválido!");
+        }
+    }
+}</code></pre>
+            </div>
+
+            <div class="highlight success">
+                ✅ <strong>VANTAGENS DO ENCAPSULAMENTO:</strong>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li>🛡️ <strong>Segurança:</strong> Dados protegidos de acesso indevido</li>
+                    <li>🔄 <strong>Flexibilidade:</strong> Mudanças internas não afetam outras classes</li>
+                    <li>📏 <strong>Controle:</strong> Validações antes de alterar dados</li>
+                    <li>🔧 <strong>Manutenibilidade:</strong> Código mais fácil de manter</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- TAB: EXEMPLOS -->
+    <!-- ============================================================ -->
+    <div id="exemplos" class="tab-content">
+        <div class="card">
+            <h2>💻 Exemplos Práticos</h2>
+
+            <!-- EXEMPLO 1 -->
+            <h3>📌 Exemplo 1: Classe Aluno (sem encapsulamento)</h3>
+            <div class="objetivo-box">
+                <strong>🎯 OBJETIVO:</strong> Mostrar o problema de NÃO usar encapsulamento. Atributos públicos permitem valores inválidos.
+            </div>
+
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this, 'code-ex1')">📋 Copiar</button>
+                <pre id="code-ex1"><code>package tema09;
+
+public class Exemplo1Aluno {
+    // ATRIBUTOS PÚBLICOS (sem encapsulamento)
+    public String nome;
+    public int idade;
+    public double nota;
+
+    public void exibirInfo() {
+        System.out.println("Nome: " + nome);
+        System.out.println("Idade: " + idade);
+        System.out.println("Nota: " + nota);
+    }
+
+    public static void main(String[] args) {
+        Exemplo1Aluno aluno = new Exemplo1Aluno();
+
+        // ACESSO DIRETO - sem nenhum controle!
+        aluno.nome = "João";
+        aluno.idade = -5;    // PROBLEMA! Idade negativa!
+        aluno.nota = 15.0;   // PROBLEMA! Nota maior que 10!
+
+        System.out.println("--- SEM ENCAPSULAMENTO ---");
+        aluno.exibirInfo();
+
+        System.out.println("\n⚠️ PROBLEMAS: idade negativa e nota > 10!");
+    }
+}</code></pre>
+            </div>
+
+            <div class="exemplo-saida">
+📤 Saída:<br>
+--- SEM ENCAPSULAMENTO ---<br>
+Nome: João<br>
+Idade: -5<br>
+Nota: 15.0<br>
+<br>
+⚠️ PROBLEMAS: idade negativa e nota > 10!
+            </div>
+
+            <!-- EXEMPLO 2 -->
+            <h3>📌 Exemplo 2: Classe Aluno (com encapsulamento)</h3>
+            <div class="objetivo-box">
+                <strong>🎯 OBJETIVO:</strong> Mostrar como o encapsulamento com getters/setters protege os dados com validações.
+            </div>
+
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this, 'code-ex2')">📋 Copiar</button>
+                <pre id="code-ex2"><code>package tema09;
+
+public class Exemplo2Aluno {
+    // ATRIBUTOS PRIVADOS
+    private String nome;
+    private int idade;
+    private double nota;
+
+    // GETTERS
+    public String getNome() {
+        return nome;
+    }
+
+    public int getIdade() {
+        return idade;
+    }
+
+    public double getNota() {
+        return nota;
+    }
+
+    // SETTERS (com validação)
+    public void setNome(String nome) {
+        if (nome != null && !nome.trim().isEmpty()) {
+            this.nome = nome;
+        } else {
+            System.out.println("❌ Nome inválido!");
+        }
+    }
+
+    public void setIdade(int idade) {
+        if (idade >= 0 && idade <= 150) {
+            this.idade = idade;
+        } else {
+            System.out.println("❌ Idade inválida! (0-150)");
+        }
+    }
+
+    public void setNota(double nota) {
+        if (nota >= 0 && nota <= 10) {
+            this.nota = nota;
+        } else {
+            System.out.println("❌ Nota inválida! (0-10)");
+        }
+    }
+
+    public void exibirInfo() {
+        System.out.println("Nome: " + nome);
+        System.out.println("Idade: " + idade);
+        System.out.println("Nota: " + nota);
+    }
+
+    public static void main(String[] args) {
+        Exemplo2Aluno aluno = new Exemplo2Aluno();
+
+        System.out.println("--- COM ENCAPSULAMENTO ---");
+
+        // Usando SETTERS (com validação)
+        aluno.setNome("Maria");
+        aluno.setIdade(22);
+        aluno.setNota(9.5);
+        aluno.exibirInfo();
+
+        System.out.println("\n--- TESTANDO VALORES INVÁLIDOS ---");
+        aluno.setIdade(-5);    // ❌ Bloqueado!
+        aluno.setNota(15.0);   // ❌ Bloqueado!
+        aluno.setNome("");     // ❌ Bloqueado!
+
+        System.out.println("\n--- DADOS PERMANECEM INTACTOS ---");
+        aluno.exibirInfo();
+    }
+}</code></pre>
+            </div>
+
+            <div class="exemplo-saida">
+📤 Saída:<br>
+--- COM ENCAPSULAMENTO ---<br>
+Nome: Maria<br>
+Idade: 22<br>
+Nota: 9.5<br>
+<br>
+--- TESTANDO VALORES INVÁLIDOS ---<br>
+❌ Idade inválida! (0-150)<br>
+❌ Nota inválida! (0-10)<br>
+❌ Nome inválido!<br>
+<br>
+--- DADOS PERMANECEM INTACTOS ---<br>
+Nome: Maria<br>
+Idade: 22<br>
+Nota: 9.5
+            </div>
+
+            <!-- EXEMPLO 3 -->
+            <h3>📌 Exemplo 3: Classe Produto (getters/setters com regras de negócio)</h3>
+            <div class="objetivo-box">
+                <strong>🎯 OBJETIVO:</strong> Mostrar getters/setters com regras de negócio (validações e cálculos).
+            </div>
+
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this, 'code-ex3')">📋 Copiar</button>
+                <pre id="code-ex3"><code>package tema09;
+
+public class Exemplo3Produto {
+    private String nome;
+    private double preco;
+    private int estoque;
+
+    // GETTERS
+    public String getNome() { return nome; }
+    public double getPreco() { return preco; }
+    public int getEstoque() { return estoque; }
+
+    // SETTERS
+    public void setNome(String nome) {
+        if (nome != null && nome.length() >= 3) {
+            this.nome = nome;
+        } else {
+            System.out.println("❌ Nome deve ter pelo menos 3 caracteres!");
+        }
+    }
+
+    public void setPreco(double preco) {
+        if (preco > 0) {
+            this.preco = preco;
+        } else {
+            System.out.println("❌ Preço deve ser maior que zero!");
+        }
+    }
+
+    public void setEstoque(int estoque) {
+        if (estoque >= 0) {
+            this.estoque = estoque;
+        } else {
+            System.out.println("❌ Estoque não pode ser negativo!");
+        }
+    }
+
+    // Método com regra de negócio: aplicar desconto
+    public void aplicarDesconto(double percentual) {
+        if (percentual > 0 && percentual <= 50) {
+            double desconto = preco * (percentual / 100);
+            preco -= desconto;
+            System.out.println("✅ Desconto de " + percentual + "% aplicado!");
+        } else {
+            System.out.println("❌ Desconto inválido! (1-50%)");
+        }
+    }
+
+    public void exibirInfo() {
+        System.out.println("Produto: " + nome);
+        System.out.println("Preço: R$ " + preco);
+        System.out.println("Estoque: " + estoque);
+    }
+
+    public static void main(String[] args) {
+        Exemplo3Produto p = new Exemplo3Produto();
+
+        p.setNome("Notebook");
+        p.setPreco(2500.0);
+        p.setEstoque(10);
+
+        System.out.println("--- PRODUTO ---");
+        p.exibirInfo();
+
+        System.out.println("\n--- APLICANDO DESCONTO ---");
+        p.aplicarDesconto(10);
+        p.exibirInfo();
+    }
+}</code></pre>
+            </div>
+
+            <div class="exemplo-saida">
+📤 Saída:<br>
+--- PRODUTO ---<br>
+Produto: Notebook<br>
+Preço: R$ 2500.0<br>
+Estoque: 10<br>
+<br>
+--- APLICANDO DESCONTO ---<br>
+✅ Desconto de 10% aplicado!<br>
+Produto: Notebook<br>
+Preço: R$ 2250.0<br>
+Estoque: 10
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- TAB: DESAFIOS -->
+    <!-- ============================================================ -->
+    <div id="desafios" class="tab-content">
+        <div class="card">
+            <h2>🏆 Desafios Práticos</h2>
+
+            <div class="highlight info">
+                🎯 <strong>INSTRUÇÕES:</strong>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li>Crie uma classe separada para cada desafio no pacote <strong>tema09</strong></li>
+                    <li>Use encapsulamento (atributos private + getters/setters com validação)</li>
+                    <li>📸 Tire print do código e do resultado de cada desafio</li>
+                </ul>
+            </div>
+
+            <!-- DESAFIO 1 -->
+            <h3 style="margin-top: 20px;">🧩 Desafio 1: Classe ContaBancaria</h3>
+            <div class="step">
+                <span class="step-number">📌</span> <strong>Classe:</strong> <code>DesafioConta.java</code>
+            </div>
+            <div class="step">
+                <span class="step-number">📌</span> Atributos privados: <code>numero</code> (int), <code>titular</code> (String), <code>saldo</code> (double)
+            </div>
+            <div class="step">
+                <span class="step-number">📌</span> Getters para todos os atributos
+            </div>
+            <div class="step">
+                <span class="step-number">📌</span> Setters para <code>numero</code> e <code>titular</code> (com validação básica)
+            </div>
+            <div class="step">
+                <span class="step-number">📌</span> Métodos: <code>depositar(double valor)</code> e <code>sacar(double valor)</code> (com validações)
+            </div>
+            <div class="step">
+                <span class="step-number">📌</span> No <code>main</code>, teste depósitos, saques e tente acessar o saldo diretamente (veja que não é possível!)
+            </div>
+
+            <div class="exemplo-saida">
+📤 Saída esperada:<br>
+--- CONTA CRIADA ---<br>
+Conta: 12345 | Titular: Maria<br>
+Saldo: R$ 0.0<br>
+<br>
+--- DEPOSITANDO ---<br>
+Depósito de R$ 1000.0 realizado!<br>
+Saldo atual: R$ 1000.0<br>
+<br>
+--- SACANDO ---<br>
+Saque de R$ 300.0 realizado!<br>
+Saldo atual: R$ 700.0<br>
+<br>
+--- TENTANDO ACESSAR SALDO DIRETAMENTE ---<br>
+❌ Não é possível acessar saldo diretamente! Use getSaldo().
+            </div>
+
+            <!-- DESAFIO 2 -->
+            <h3 style="margin-top: 25px;">🧩 Desafio 2: Classe Funcionario</h3>
+            <div class="step">
+                <span class="step-number">📌</span> <strong>Classe:</strong> <code>DesafioFuncionario.java</code>
+            </div>
+            <div class="step">
+                <span class="step-number">📌</span> Atributos privados: <code>nome</code> (String), <code>salarioBruto</code> (double), <code>cargo</code> (String)
+            </div>
+            <div class="step">
+                <span class="step-number">📌</span> Getters e Setters com validações
+            </div>
+            <div class="step">
+                <span class="step-number">📌</span> Método: <code>calcularSalarioLiquido()</code> (desconto de 10%)
+            </div>
+            <div class="step">
+                <span class="step-number">📌</span> No <code>main</code>, crie um funcionário, exiba salário bruto e líquido
+            </div>
+
+            <div class="exemplo-saida">
+📤 Saída esperada:<br>
+--- FUNCIONÁRIO ---<br>
+Nome: João Silva<br>
+Cargo: Analista<br>
+Salário Bruto: R$ 5000.0<br>
+Salário Líquido: R$ 4500.0 (desconto de 10%)
+            </div>
+
+            <!-- DESAFIO 3 -->
+            <h3 style="margin-top: 25px;">🧩 Desafio 3: Classe Livro</h3>
+            <div class="step">
+                <span class="step-number">📌</span> <strong>Classe:</strong> <code>DesafioLivro.java</code>
+            </div>
+            <div class="step">
+                <span class="step-number">📌</span> Atributos privados: <code>titulo</code>, <code>autor</code>, <code>paginas</code>
+            </div>
+            <div class="step">
+                <span class="step-number">📌</span> Getters e Setters (com validações apropriadas)
+            </div>
+            <div class="step">
+                <span class="step-number">📌</span> Método: <code>exibirInfo()</code> para mostrar todos os dados
+            </div>
+            <div class="step">
+                <span class="step-number">📌</span> No <code>main</code>, crie um livro, exiba as informações e tente definir valores inválidos
+            </div>
+
+            <div class="exemplo-saida">
+📤 Saída esperada:<br>
+--- LIVRO ---<br>
+Título: Java para Iniciantes<br>
+Autor: Maria Silva<br>
+Páginas: 300<br>
+<br>
+--- TESTANDO VALORES INVÁLIDOS ---<br>
+❌ Título não pode estar vazio!<br>
+❌ Número de páginas deve ser maior que zero!
+            </div>
+        </div>
+
+        <!-- CHECKLIST -->
+        <div class="card">
+            <h2>✅ Checklist de Entrega</h2>
+
+            <div class="step">
+                <span class="step-number">📁</span> Criei as classes no pacote <strong>tema09</strong>:
+                <ul style="margin-left: 30px; margin-top: 8px;">
+                    <li><code>DesafioConta.java</code></li>
+                    <li><code>DesafioFuncionario.java</code></li>
+                    <li><code>DesafioLivro.java</code></li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <span class="step-number">📸</span> Tirei print do <strong>código</strong> de cada desafio
+            </div>
+
+            <div class="step">
+                <span class="step-number">📸</span> Tirei print do <strong>resultado</strong> (saída no console) de cada desafio
+            </div>
+
+            <div class="step">
+                <span class="step-number">📤</span> Salvei os arquivos no repositório <strong>java9</strong>
+            </div>
+
+            <div class="highlight success" style="margin-top: 15px;">
+                📤 <strong>Entregar:</strong> Prints do código e resultado de cada desafio + link do repositório <strong>java9</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <p>📚 TEMA 09 - Encapsulamento e Métodos Modificadores/Acessores</p>
+        <p>🎯 Aprenda a proteger seus dados com encapsulamento!</p>
+    </div>
+</div>
+
+<button class="btn-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆️ Topo</button>
+
+<script>
+    // Sistema de abas
+    const tabLinks = document.querySelectorAll('.tab-link');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            const tabId = link.getAttribute('data-tab');
+            tabLinks.forEach(l => l.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+            link.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+
+    // Função de copiar código
+    function copyCode(btn, elementId) {
+        const codeElement = document.getElementById(elementId);
+        const textToCopy = codeElement.innerText;
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '✅ Copiado!';
+            btn.classList.add('copied');
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.classList.remove('copied');
+            }, 2000);
+        }).catch(() => {
+            btn.innerHTML = '❌ Erro';
+            setTimeout(() => btn.innerHTML = '📋 Copiar', 2000);
+        });
+    }
+</script>
+</body>
+</html>

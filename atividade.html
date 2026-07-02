@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividade de Fixação - POO, Construtores e Encapsulamento</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .badge-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 16px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: #6a11cb;
+            margin-bottom: 15px;
+            border-left: 5px solid #6a11cb;
+            padding-left: 15px;
+            font-size: 1.3rem;
+        }
+
+        .card h3 {
+            color: #4a0e8a;
+            margin: 18px 0 10px 0;
+            font-size: 1.1rem;
+        }
+
+        .question {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px 18px;
+            margin-bottom: 15px;
+            border-left: 4px solid #6a11cb;
+        }
+
+        .question-number {
+            display: inline-block;
+            background: #6a11cb;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-right: 12px;
+        }
+
+        .question-text {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .question-text code {
+            background: #e9ecef;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 13px;
+        }
+
+        .question-type {
+            display: inline-block;
+            background: #6c757d;
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 10px;
+            border-radius: 12px;
+            margin-left: 10px;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .option input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .option label {
+            font-size: 14px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .option.correct {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .option.wrong {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .option.disabled {
+            opacity: 0.7;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            margin: 5px;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 5px 15px rgba(106,17,203,0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .result-box {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            border: 3px solid #6a11cb;
+            display: none;
+        }
+
+        .result-box.show {
+            display: block;
+        }
+
+        .score {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #6a11cb;
+        }
+
+        .feedback-item {
+            padding: 6px 0;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .feedback-item.correct {
+            color: #28a745;
+        }
+
+        .feedback-item.wrong {
+            color: #dc3545;
+        }
+
+        .btn-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #6a11cb;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255,255,255,0.7);
+            font-size: 12px;
+        }
+
+        .print-area {
+            display: none;
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .print-area {
+                display: block !important;
+            }
+            .card {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+            .header {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .badge {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .option.correct {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .option.wrong {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .result-box {
+                border: 2px solid #6a11cb !important;
+            }
+            .btn {
+                display: none !important;
+            }
+            .question {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .card { padding: 18px; }
+            .header h1 { font-size: 1.4rem; }
+            .options { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- HEADER -->
+    <div class="header">
+        <h1>📝 Atividade de Fixação</h1>
+        <p>POO | Construtores | Encapsulamento</p>
+        <div class="badge-group">
+            <span class="badge">📝 15 questões</span>
+            <span class="badge">⏱️ ~20 minutos</span>
+            <span class="badge">🎯 Temas 7, 8 e 9</span>
+        </div>
+    </div>
+
+    <!-- INTRODUÇÃO -->
+    <div class="card no-print">
+        <h2>📖 Instruções</h2>
+        <p>Responda as <strong>15 questões</strong> sobre POO, Construtores e Encapsulamento.</p>
+        <p>As questões com <strong>"V ou F (3 itens)"</strong> indicam que você deve marcar Verdadeiro ou Falso para cada afirmativa.</p>
+        <p>Ao final, clique em <strong>"Verificar Respostas"</strong> para corrigir e ver seu desempenho.</p>
+        <p>Você pode <strong>imprimir</strong> o resultado com o gabarito clicando no botão ao final.</p>
+    </div>
+
+    <!-- QUESTÕES -->
+    <div class="card" id="testes">
+        <h2>✏️ Responda as questões</h2>
+
+        <!-- ==================== Q1: V ou F (3 itens) ==================== -->
+        <div class="question" id="q1">
+            <div class="question-text">
+                <span class="question-number">1</span>
+                Sobre POO:
+                <span class="question-type">V ou F (3 itens)</span>
+            </div>
+            <div style="margin: 8px 0; padding-left: 10px;">
+                <div style="display: flex; align-items: center; gap: 15px; padding: 4px 0;">
+                    <span style="font-weight:600; min-width:200px;">a) Uma classe é um molde para criar objetos</span>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q1a" value="V"> V
+                    </label>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q1a" value="F"> F
+                    </label>
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px; padding: 4px 0;">
+                    <span style="font-weight:600; min-width:200px;">b) Objeto é uma instância de uma classe</span>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q1b" value="V"> V
+                    </label>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q1b" value="F"> F
+                    </label>
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px; padding: 4px 0;">
+                    <span style="font-weight:600; min-width:200px;">c) Herança é um dos pilares da POO</span>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q1c" value="V"> V
+                    </label>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q1c" value="F"> F
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== Q2: Múltipla escolha ==================== -->
+        <div class="question" id="q2">
+            <div class="question-text">
+                <span class="question-number">2</span>
+                O que é um construtor em Java?
+                <span class="question-type">MÚLTIPLA ESCOLHA</span>
+            </div>
+            <div class="options">
+                <div class="option"><input type="radio" name="q2" value="A"><label>Um método que destrói objetos</label></div>
+                <div class="option"><input type="radio" name="q2" value="B"><label>Um método especial para inicializar objetos</label></div>
+                <div class="option"><input type="radio" name="q2" value="C"><label>Um tipo de variável</label></div>
+                <div class="option"><input type="radio" name="q2" value="D"><label>Um modificador de acesso</label></div>
+                <div class="option"><input type="radio" name="q2" value="E"><label>Um pacote Java</label></div>
+            </div>
+        </div>
+
+        <!-- ==================== Q3: Múltipla escolha ==================== -->
+        <div class="question" id="q3">
+            <div class="question-text">
+                <span class="question-number">3</span>
+                Qual modificador de acesso torna um atributo acessível apenas dentro da própria classe?
+                <span class="question-type">MÚLTIPLA ESCOLHA</span>
+            </div>
+            <div class="options">
+                <div class="option"><input type="radio" name="q3" value="A"><label>public</label></div>
+                <div class="option"><input type="radio" name="q3" value="B"><label>private</label></div>
+                <div class="option"><input type="radio" name="q3" value="C"><label>protected</label></div>
+                <div class="option"><input type="radio" name="q3" value="D"><label>static</label></div>
+                <div class="option"><input type="radio" name="q3" value="E"><label>final</label></div>
+            </div>
+        </div>
+
+        <!-- ==================== Q4: V ou F (3 itens) ==================== -->
+        <div class="question" id="q4">
+            <div class="question-text">
+                <span class="question-number">4</span>
+                Sobre Construtores:
+                <span class="question-type">V ou F (3 itens)</span>
+            </div>
+            <div style="margin: 8px 0; padding-left: 10px;">
+                <div style="display: flex; align-items: center; gap: 15px; padding: 4px 0;">
+                    <span style="font-weight:600; min-width:200px;">a) O construtor deve ter o mesmo nome da classe</span>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q4a" value="V"> V
+                    </label>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q4a" value="F"> F
+                    </label>
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px; padding: 4px 0;">
+                    <span style="font-weight:600; min-width:200px;">b) O construtor padrão é criado automaticamente pelo Java</span>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q4b" value="V"> V
+                    </label>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q4b" value="F"> F
+                    </label>
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px; padding: 4px 0;">
+                    <span style="font-weight:600; min-width:200px;">c) Construtores podem ser sobrecarregados</span>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q4c" value="V"> V
+                    </label>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q4c" value="F"> F
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== Q5: Múltipla escolha ==================== -->
+        <div class="question" id="q5">
+            <div class="question-text">
+                <span class="question-number">5</span>
+                Qual a função do `this` em um construtor?
+                <span class="question-type">MÚLTIPLA ESCOLHA</span>
+            </div>
+            <div class="options">
+                <div class="option"><input type="radio" name="q5" value="A"><label>Chamar o construtor da superclasse</label></div>
+                <div class="option"><input type="radio" name="q5" value="B"><label>Referenciar o próprio objeto</label></div>
+                <div class="option"><input type="radio" name="q5" value="C"><label>Criar um novo objeto</label></div>
+                <div class="option"><input type="radio" name="q5" value="D"><label>Destruir o objeto</label></div>
+                <div class="option"><input type="radio" name="q5" value="E"><label>Definir a classe como final</label></div>
+            </div>
+        </div>
+
+        <!-- ==================== Q6: Múltipla escolha ==================== -->
+        <div class="question" id="q6">
+            <div class="question-text">
+                <span class="question-number">6</span>
+                O que significa sobrecarga de construtores?
+                <span class="question-type">MÚLTIPLA ESCOLHA</span>
+            </div>
+            <div class="options">
+                <div class="option"><input type="radio" name="q6" value="A"><label>Vários construtores com mesmo nome e parâmetros diferentes</label></div>
+                <div class="option"><input type="radio" name="q6" value="B"><label>Vários construtores com nomes diferentes</label></div>
+                <div class="option"><input type="radio" name="q6" value="C"><label>Um único construtor com muitos parâmetros</label></div>
+                <div class="option"><input type="radio" name="q6" value="D"><label>Construtores que não têm parâmetros</label></div>
+                <div class="option"><input type="radio" name="q6" value="E"><label>Construtores privados</label></div>
+            </div>
+        </div>
+
+        <!-- ==================== Q7: V ou F (3 itens) ==================== -->
+        <div class="question" id="q7">
+            <div class="question-text">
+                <span class="question-number">7</span>
+                Sobre Encapsulamento:
+                <span class="question-type">V ou F (3 itens)</span>
+            </div>
+            <div style="margin: 8px 0; padding-left: 10px;">
+                <div style="display: flex; align-items: center; gap: 15px; padding: 4px 0;">
+                    <span style="font-weight:600; min-width:200px;">a) Encapsulamento protege os dados internos da classe</span>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q7a" value="V"> V
+                    </label>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q7a" value="F"> F
+                    </label>
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px; padding: 4px 0;">
+                    <span style="font-weight:600; min-width:200px;">b) Getters são usados para modificar atributos</span>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q7b" value="V"> V
+                    </label>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q7b" value="F"> F
+                    </label>
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px; padding: 4px 0;">
+                    <span style="font-weight:600; min-width:200px;">c) Setters podem validar valores antes de atribuir</span>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q7c" value="V"> V
+                    </label>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q7c" value="F"> F
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== Q8: Múltipla escolha ==================== -->
+        <div class="question" id="q8">
+            <div class="question-text">
+                <span class="question-number">8</span>
+                Qual é a principal vantagem do encapsulamento?
+                <span class="question-type">MÚLTIPLA ESCOLHA</span>
+            </div>
+            <div class="options">
+                <div class="option"><input type="radio" name="q8" value="A"><label>Código mais rápido</label></div>
+                <div class="option"><input type="radio" name="q8" value="B"><label>Proteção dos dados</label></div>
+                <div class="option"><input type="radio" name="q8" value="C"><label>Menos código</label></div>
+                <div class="option"><input type="radio" name="q8" value="D"><label>Mais variáveis</label></div>
+                <div class="option"><input type="radio" name="q8" value="E"><label>Herança múltipla</label></div>
+            </div>
+        </div>
+
+        <!-- ==================== Q9: Múltipla escolha ==================== -->
+        <div class="question" id="q9">
+            <div class="question-text">
+                <span class="question-number">9</span>
+                Qual a vantagem de usar `this()` entre construtores?
+                <span class="question-type">MÚLTIPLA ESCOLHA</span>
+            </div>
+            <div class="options">
+                <div class="option"><input type="radio" name="q9" value="A"><label>Criar mais objetos</label></div>
+                <div class="option"><input type="radio" name="q9" value="B"><label>Reutilizar código e evitar repetição</label></div>
+                <div class="option"><input type="radio" name="q9" value="C"><label>Aumentar a velocidade do programa</label></div>
+                <div class="option"><input type="radio" name="q9" value="D"><label>Permitir herança</label></div>
+                <div class="option"><input type="radio" name="q9" value="E"><label>Definir a classe como abstrata</label></div>
+            </div>
+        </div>
+
+        <!-- ==================== Q10: V ou F (3 itens) ==================== -->
+        <div class="question" id="q10">
+            <div class="question-text">
+                <span class="question-number">10</span>
+                Sobre Modificadores de Acesso:
+                <span class="question-type">V ou F (3 itens)</span>
+            </div>
+            <div style="margin: 8px 0; padding-left: 10px;">
+                <div style="display: flex; align-items: center; gap: 15px; padding: 4px 0;">
+                    <span style="font-weight:600; min-width:200px;">a) public permite acesso de qualquer classe</span>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q10a" value="V"> V
+                    </label>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q10a" value="F"> F
+                    </label>
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px; padding: 4px 0;">
+                    <span style="font-weight:600; min-width:200px;">b) protected é o modificador mais restritivo</span>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q10b" value="V"> V
+                    </label>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q10b" value="F"> F
+                    </label>
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px; padding: 4px 0;">
+                    <span style="font-weight:600; min-width:200px;">c) default permite acesso apenas no mesmo pacote</span>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q10c" value="V"> V
+                    </label>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q10c" value="F"> F
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== Q11: Múltipla escolha ==================== -->
+        <div class="question" id="q11">
+            <div class="question-text">
+                <span class="question-number">11</span>
+                Qual é a função dos métodos setters?
+                <span class="question-type">MÚLTIPLA ESCOLHA</span>
+            </div>
+            <div class="options">
+                <div class="option"><input type="radio" name="q11" value="A"><label>Obter valores dos atributos</label></div>
+                <div class="option"><input type="radio" name="q11" value="B"><label>Modificar valores dos atributos</label></div>
+                <div class="option"><input type="radio" name="q11" value="C"><label>Criar novos atributos</label></div>
+                <div class="option"><input type="radio" name="q11" value="D"><label>Destruir objetos</label></div>
+                <div class="option"><input type="radio" name="q11" value="E"><label>Importar pacotes</label></div>
+            </div>
+        </div>
+
+        <!-- ==================== Q12: Múltipla escolha ==================== -->
+        <div class="question" id="q12">
+            <div class="question-text">
+                <span class="question-number">12</span>
+                Qual a convenção de nomenclatura para um método getter?
+                <span class="question-type">MÚLTIPLA ESCOLHA</span>
+            </div>
+            <div class="options">
+                <div class="option"><input type="radio" name="q12" value="A"><label>getNomeAtributo()</label></div>
+                <div class="option"><input type="radio" name="q12" value="B"><label>atributoGet()</label></div>
+                <div class="option"><input type="radio" name="q12" value="C"><label>obterAtributo()</label></div>
+                <div class="option"><input type="radio" name="q12" value="D"><label>acessarAtributo()</label></div>
+                <div class="option"><input type="radio" name="q12" value="E"><label>pegarAtributo()</label></div>
+            </div>
+        </div>
+
+        <!-- ==================== Q13: V ou F (3 itens) ==================== -->
+        <div class="question" id="q13">
+            <div class="question-text">
+                <span class="question-number">13</span>
+                Sobre Getters e Setters:
+                <span class="question-type">V ou F (3 itens)</span>
+            </div>
+            <div style="margin: 8px 0; padding-left: 10px;">
+                <div style="display: flex; align-items: center; gap: 15px; padding: 4px 0;">
+                    <span style="font-weight:600; min-width:200px;">a) Getters são usados para ler valores</span>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q13a" value="V"> V
+                    </label>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q13a" value="F"> F
+                    </label>
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px; padding: 4px 0;">
+                    <span style="font-weight:600; min-width:200px;">b) Setters começam com a palavra "set"</span>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q13b" value="V"> V
+                    </label>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q13b" value="F"> F
+                    </label>
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px; padding: 4px 0;">
+                    <span style="font-weight:600; min-width:200px;">c) Getters podem ter validações</span>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q13c" value="V"> V
+                    </label>
+                    <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="q13c" value="F"> F
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== Q14: Múltipla escolha ==================== -->
+        <div class="question" id="q14">
+            <div class="question-text">
+                <span class="question-number">14</span>
+                Qual dos pilares da POO está diretamente relacionado ao uso de getters e setters?
+                <span class="question-type">MÚLTIPLA ESCOLHA</span>
+            </div>
+            <div class="options">
+                <div class="option"><input type="radio" name="q14" value="A"><label>Herança</label></div>
+                <div class="option"><input type="radio" name="q14" value="B"><label>Polimorfismo</label></div>
+                <div class="option"><input type="radio" name="q14" value="C"><label>Encapsulamento</label></div>
+                <div class="option"><input type="radio" name="q14" value="D"><label>Abstração</label></div>
+                <div class="option"><input type="radio" name="q14" value="E"><label>Nenhuma das anteriores</label></div>
+            </div>
+        </div>
+
+        <!-- ==================== Q15: Múltipla escolha ==================== -->
+        <div class="question" id="q15">
+            <div class="question-text">
+                <span class="question-number">15</span>
+                Se você definir apenas o método setter sem getter, o atributo se torna:
+                <span class="question-type">MÚLTIPLA ESCOLHA</span>
+            </div>
+            <div class="options">
+                <div class="option"><input type="radio" name="q15" value="A"><label>Somente leitura</label></div>
+                <div class="option"><input type="radio" name="q15" value="B"><label>Somente gravação</label></div>
+                <div class="option"><input type="radio" name="q15" value="C"><label>Leitura e gravação</label></div>
+                <div class="option"><input type="radio" name="q15" value="D"><label>Inacessível</label></div>
+                <div class="option"><input type="radio" name="q15" value="E"><label>Nenhuma das anteriores</label></div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;" class="no-print">
+            <button class="btn" onclick="corrigirQuiz()">✅ Verificar Respostas</button>
+            <button class="btn btn-secondary" onclick="limparQuiz()">🔄 Limpar respostas</button>
+        </div>
+    </div>
+
+    <!-- RESULTADO -->
+    <div class="card result-box" id="resultado">
+        <h2>📊 Resultado da Atividade</h2>
+        <div class="score" id="pontuacao">0 / 15</div>
+        <p style="margin: 10px 0;">Respostas corretas:</p>
+        <div id="feedback"></div>
+
+        <div style="margin-top: 20px;" class="no-print">
+            <button class="btn btn-success" onclick="window.print()">🖨️ Imprimir Gabarito (PDF)</button>
+        </div>
+        <div class="highlight info" style="margin-top: 15px;">
+            📸 <strong>IMPORTANTE:</strong> Clique em "Imprimir Gabarito" para salvar o resultado em PDF.
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer no-print">
+        <p>📚 Temas 7, 8 e 9 - POO, Construtores e Encapsulamento | Atividade de Fixação</p>
+        <p>🎯 Teste seus conhecimentos sobre POO, Construtores e Encapsulamento!</p>
+    </div>
+</div>
+
+<button class="btn-top no-print" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆️ Topo</button>
+
+<script>
+    // ============================================================
+    // GABARITO COMPLETO
+    // ============================================================
+    const gabarito = {
+        q1a: 'V', q1b: 'V', q1c: 'V',
+        q2: 'B',
+        q3: 'B',
+        q4a: 'V', q4b: 'V', q4c: 'V',
+        q5: 'B',
+        q6: 'A',
+        q7a: 'V', q7b: 'F', q7c: 'V',
+        q8: 'B',
+        q9: 'B',
+        q10a: 'V', q10b: 'F', q10c: 'V',
+        q11: 'B',
+        q12: 'A',
+        q13a: 'V', q13b: 'V', q13c: 'F',
+        q14: 'C',
+        q15: 'B'
+    };
+
+    // ============================================================
+    // CORREÇÃO
+    // ============================================================
+    function corrigirQuiz() {
+        let acertos = 0;
+        let feedbackHTML = '';
+        let todasRespondidas = true;
+
+        // === Q1: V ou F (3 itens) ===
+        const q1a = document.querySelector('input[name="q1a"]:checked');
+        const q1b = document.querySelector('input[name="q1b"]:checked');
+        const q1c = document.querySelector('input[name="q1c"]:checked');
+
+        if (q1a && q1b && q1c) {
+            const aCorr = q1a.value === gabarito.q1a;
+            const bCorr = q1b.value === gabarito.q1b;
+            const cCorr = q1c.value === gabarito.q1c;
+            const totalQ1 = (aCorr ? 1 : 0) + (bCorr ? 1 : 0) + (cCorr ? 1 : 0);
+            acertos += totalQ1 / 3;
+
+            marcarVF('q1a', gabarito.q1a);
+            marcarVF('q1b', gabarito.q1b);
+            marcarVF('q1c', gabarito.q1c);
+
+            feedbackHTML += `<div class="feedback-item ${totalQ1 === 3 ? 'correct' : 'wrong'}">
+                ${totalQ1 === 3 ? '✅' : '❌'} Q1 - ${totalQ1}/3 acertos (esperado: V, V, V)
+            </div>`;
+        } else {
+            todasRespondidas = false;
+            feedbackHTML += `<div class="feedback-item wrong">❌ Q1 - Não respondida completamente</div>`;
+        }
+
+        // === Q2: Múltipla escolha ===
+        const q2 = document.querySelector('input[name="q2"]:checked');
+        if (q2) {
+            const isCorrect = q2.value === gabarito.q2;
+            acertos += isCorrect ? 1 : 0;
+            marcarOpcao('q2', gabarito.q2);
+            feedbackHTML += `<div class="feedback-item ${isCorrect ? 'correct' : 'wrong'}">
+                ${isCorrect ? '✅' : '❌'} Q2 - ${isCorrect ? 'Correta' : 'Incorreta (resposta: B)'}
+            </div>`;
+        } else {
+            todasRespondidas = false;
+            feedbackHTML += `<div class="feedback-item wrong">❌ Q2 - Não respondida</div>`;
+        }
+
+        // === Q3: Múltipla escolha ===
+        const q3 = document.querySelector('input[name="q3"]:checked');
+        if (q3) {
+            const isCorrect = q3.value === gabarito.q3;
+            acertos += isCorrect ? 1 : 0;
+            marcarOpcao('q3', gabarito.q3);
+            feedbackHTML += `<div class="feedback-item ${isCorrect ? 'correct' : 'wrong'}">
+                ${isCorrect ? '✅' : '❌'} Q3 - ${isCorrect ? 'Correta' : 'Incorreta (resposta: B)'}
+            </div>`;
+        } else {
+            todasRespondidas = false;
+            feedbackHTML += `<div class="feedback-item wrong">❌ Q3 - Não respondida</div>`;
+        }
+
+        // === Q4: V ou F (3 itens) ===
+        const q4a = document.querySelector('input[name="q4a"]:checked');
+        const q4b = document.querySelector('input[name="q4b"]:checked');
+        const q4c = document.querySelector('input[name="q4c"]:checked');
+
+        if (q4a && q4b && q4c) {
+            const aCorr = q4a.value === gabarito.q4a;
+            const bCorr = q4b.value === gabarito.q4b;
+            const cCorr = q4c.value === gabarito.q4c;
+            const totalQ4 = (aCorr ? 1 : 0) + (bCorr ? 1 : 0) + (cCorr ? 1 : 0);
+            acertos += totalQ4 / 3;
+
+            marcarVF('q4a', gabarito.q4a);
+            marcarVF('q4b', gabarito.q4b);
+            marcarVF('q4c', gabarito.q4c);
+
+            feedbackHTML += `<div class="feedback-item ${totalQ4 === 3 ? 'correct' : 'wrong'}">
+                ${totalQ4 === 3 ? '✅' : '❌'} Q4 - ${totalQ4}/3 acertos (esperado: V, V, V)
+            </div>`;
+        } else {
+            todasRespondidas = false;
+            feedbackHTML += `<div class="feedback-item wrong">❌ Q4 - Não respondida completamente</div>`;
+        }
+
+        // === Q5: Múltipla escolha ===
+        const q5 = document.querySelector('input[name="q5"]:checked');
+        if (q5) {
+            const isCorrect = q5.value === gabarito.q5;
+            acertos += isCorrect ? 1 : 0;
+            marcarOpcao('q5', gabarito.q5);
+            feedbackHTML += `<div class="feedback-item ${isCorrect ? 'correct' : 'wrong'}">
+                ${isCorrect ? '✅' : '❌'} Q5 - ${isCorrect ? 'Correta' : 'Incorreta (resposta: B)'}
+            </div>`;
+        } else {
+            todasRespondidas = false;
+            feedbackHTML += `<div class="feedback-item wrong">❌ Q5 - Não respondida</div>`;
+        }
+
+        // === Q6: Múltipla escolha ===
+        const q6 = document.querySelector('input[name="q6"]:checked');
+        if (q6) {
+            const isCorrect = q6.value === gabarito.q6;
+            acertos += isCorrect ? 1 : 0;
+            marcarOpcao('q6', gabarito.q6);
+            feedbackHTML += `<div class="feedback-item ${isCorrect ? 'correct' : 'wrong'}">
+                ${isCorrect ? '✅' : '❌'} Q6 - ${isCorrect ? 'Correta' : 'Incorreta (resposta: A)'}
+            </div>`;
+        } else {
+            todasRespondidas = false;
+            feedbackHTML += `<div class="feedback-item wrong">❌ Q6 - Não respondida</div>`;
+        }
+
+        // === Q7: V ou F (3 itens) ===
+        const q7a = document.querySelector('input[name="q7a"]:checked');
+        const q7b = document.querySelector('input[name="q7b"]:checked');
+        const q7c = document.querySelector('input[name="q7c"]:checked');
+
+        if (q7a && q7b && q7c) {
+            const aCorr = q7a.value === gabarito.q7a;
+            const bCorr = q7b.value === gabarito.q7b;
+            const cCorr = q7c.value === gabarito.q7c;
+            const totalQ7 = (aCorr ? 1 : 0) + (bCorr ? 1 : 0) + (cCorr ? 1 : 0);
+            acertos += totalQ7 / 3;
+
+            marcarVF('q7a', gabarito.q7a);
+            marcarVF('q7b', gabarito.q7b);
+            marcarVF('q7c', gabarito.q7c);
+
+            feedbackHTML += `<div class="feedback-item ${totalQ7 === 3 ? 'correct' : 'wrong'}">
+                ${totalQ7 === 3 ? '✅' : '❌'} Q7 - ${totalQ7}/3 acertos (esperado: V, F, V)
+            </div>`;
+        } else {
+            todasRespondidas = false;
+            feedbackHTML += `<div class="feedback-item wrong">❌ Q7 - Não respondida completamente</div>`;
+        }
+
+        // === Q8: Múltipla escolha ===
+        const q8 = document.querySelector('input[name="q8"]:checked');
+        if (q8) {
+            const isCorrect = q8.value === gabarito.q8;
+            acertos += isCorrect ? 1 : 0;
+            marcarOpcao('q8', gabarito.q8);
+            feedbackHTML += `<div class="feedback-item ${isCorrect ? 'correct' : 'wrong'}">
+                ${isCorrect ? '✅' : '❌'} Q8 - ${isCorrect ? 'Correta' : 'Incorreta (resposta: B)'}
+            </div>`;
+        } else {
+            todasRespondidas = false;
+            feedbackHTML += `<div class="feedback-item wrong">❌ Q8 - Não respondida</div>`;
+        }
+
+        // === Q9: Múltipla escolha ===
+        const q9 = document.querySelector('input[name="q9"]:checked');
+        if (q9) {
+            const isCorrect = q9.value === gabarito.q9;
+            acertos += isCorrect ? 1 : 0;
+            marcarOpcao('q9', gabarito.q9);
+            feedbackHTML += `<div class="feedback-item ${isCorrect ? 'correct' : 'wrong'}">
+                ${isCorrect ? '✅' : '❌'} Q9 - ${isCorrect ? 'Correta' : 'Incorreta (resposta: B)'}
+            </div>`;
+        } else {
+            todasRespondidas = false;
+            feedbackHTML += `<div class="feedback-item wrong">❌ Q9 - Não respondida</div>`;
+        }
+
+        // === Q10: V ou F (3 itens) ===
+        const q10a = document.querySelector('input[name="q10a"]:checked');
+        const q10b = document.querySelector('input[name="q10b"]:checked');
+        const q10c = document.querySelector('input[name="q10c"]:checked');
+
+        if (q10a && q10b && q10c) {
+            const aCorr = q10a.value === gabarito.q10a;
+            const bCorr = q10b.value === gabarito.q10b;
+            const cCorr = q10c.value === gabarito.q10c;
+            const totalQ10 = (aCorr ? 1 : 0) + (bCorr ? 1 : 0) + (cCorr ? 1 : 0);
+            acertos += totalQ10 / 3;
+
+            marcarVF('q10a', gabarito.q10a);
+            marcarVF('q10b', gabarito.q10b);
+            marcarVF('q10c', gabarito.q10c);
+
+            feedbackHTML += `<div class="feedback-item ${totalQ10 === 3 ? 'correct' : 'wrong'}">
+                ${totalQ10 === 3 ? '✅' : '❌'} Q10 - ${totalQ10}/3 acertos (esperado: V, F, V)
+            </div>`;
+        } else {
+            todasRespondidas = false;
+            feedbackHTML += `<div class="feedback-item wrong">❌ Q10 - Não respondida completamente</div>`;
+        }
+
+        // === Q11: Múltipla escolha ===
+        const q11 = document.querySelector('input[name="q11"]:checked');
+        if (q11) {
+            const isCorrect = q11.value === gabarito.q11;
+            acertos += isCorrect ? 1 : 0;
+            marcarOpcao('q11', gabarito.q11);
+            feedbackHTML += `<div class="feedback-item ${isCorrect ? 'correct' : 'wrong'}">
+                ${isCorrect ? '✅' : '❌'} Q11 - ${isCorrect ? 'Correta' : 'Incorreta (resposta: B)'}
+            </div>`;
+        } else {
+            todasRespondidas = false;
+            feedbackHTML += `<div class="feedback-item wrong">❌ Q11 - Não respondida</div>`;
+        }
+
+        // === Q12: Múltipla escolha ===
+        const q12 = document.querySelector('input[name="q12"]:checked');
+        if (q12) {
+            const isCorrect = q12.value === gabarito.q12;
+            acertos += isCorrect ? 1 : 0;
+            marcarOpcao('q12', gabarito.q12);
+            feedbackHTML += `<div class="feedback-item ${isCorrect ? 'correct' : 'wrong'}">
+                ${isCorrect ? '✅' : '❌'} Q12 - ${isCorrect ? 'Correta' : 'Incorreta (resposta: A)'}
+            </div>`;
+        } else {
+            todasRespondidas = false;
+            feedbackHTML += `<div class="feedback-item wrong">❌ Q12 - Não respondida</div>`;
+        }
+
+        // === Q13: V ou F (3 itens) ===
+        const q13a = document.querySelector('input[name="q13a"]:checked');
+        const q13b = document.querySelector('input[name="q13b"]:checked');
+        const q13c = document.querySelector('input[name="q13c"]:checked');
+
+        if (q13a && q13b && q13c) {
+            const aCorr = q13a.value === gabarito.q13a;
+            const bCorr = q13b.value === gabarito.q13b;
+            const cCorr = q13c.value === gabarito.q13c;
+            const totalQ13 = (aCorr ? 1 : 0) + (bCorr ? 1 : 0) + (cCorr ? 1 : 0);
+            acertos += totalQ13 / 3;
+
+            marcarVF('q13a', gabarito.q13a);
+            marcarVF('q13b', gabarito.q13b);
+            marcarVF('q13c', gabarito.q13c);
+
+            feedbackHTML += `<div class="feedback-item ${totalQ13 === 3 ? 'correct' : 'wrong'}">
+                ${totalQ13 === 3 ? '✅' : '❌'} Q13 - ${totalQ13}/3 acertos (esperado: V, V, F)
+            </div>`;
+        } else {
+            todasRespondidas = false;
+            feedbackHTML += `<div class="feedback-item wrong">❌ Q13 - Não respondida completamente</div>`;
+        }
+
+        // === Q14: Múltipla escolha ===
+        const q14 = document.querySelector('input[name="q14"]:checked');
+        if (q14) {
+            const isCorrect = q14.value === gabarito.q14;
+            acertos += isCorrect ? 1 : 0;
+            marcarOpcao('q14', gabarito.q14);
+            feedbackHTML += `<div class="feedback-item ${isCorrect ? 'correct' : 'wrong'}">
+                ${isCorrect ? '✅' : '❌'} Q14 - ${isCorrect ? 'Correta' : 'Incorreta (resposta: C)'}
+            </div>`;
+        } else {
+            todasRespondidas = false;
+            feedbackHTML += `<div class="feedback-item wrong">❌ Q14 - Não respondida</div>`;
+        }
+
+        // === Q15: Múltipla escolha ===
+        const q15 = document.querySelector('input[name="q15"]:checked');
+        if (q15) {
+            const isCorrect = q15.value === gabarito.q15;
+            acertos += isCorrect ? 1 : 0;
+            marcarOpcao('q15', gabarito.q15);
+            feedbackHTML += `<div class="feedback-item ${isCorrect ? 'correct' : 'wrong'}">
+                ${isCorrect ? '✅' : '❌'} Q15 - ${isCorrect ? 'Correta' : 'Incorreta (resposta: B)'}
+            </div>`;
+        } else {
+            todasRespondidas = false;
+            feedbackHTML += `<div class="feedback-item wrong">❌ Q15 - Não respondida</div>`;
+        }
+
+        if (!todasRespondidas) {
+            alert('⚠️ Responda todas as questões antes de finalizar!');
+            return;
+        }
+
+        // Exibir resultado
+        const total = 15;
+        document.getElementById('pontuacao').textContent = acertos + ' / ' + total;
+        document.getElementById('feedback').innerHTML = feedbackHTML;
+        document.getElementById('resultado').classList.add('show');
+
+        document.getElementById('resultado').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Mensagem extra
+        let mensagem = '';
+        if (acertos === total) {
+            mensagem = `
+                <div class="highlight success" style="margin-top: 15px; text-align: left;">
+                    🎉 <strong>PARABÉNS! Você acertou todas!</strong> Excelente domínio de POO, Construtores e Encapsulamento!
+                </div>
+            `;
+        } else if (acertos >= 11) {
+            mensagem = `
+                <div class="highlight tip" style="margin-top: 15px; text-align: left;">
+                    💪 <strong>Bom trabalho!</strong> Você acertou ${acertos}/15. Revise os tópicos que errou!
+                </div>
+            `;
+        } else if (acertos >= 8) {
+            mensagem = `
+                <div class="highlight info" style="margin-top: 15px; text-align: left;">
+                    📚 <strong>Continue praticando!</strong> Você acertou ${acertos}/15. Reveja os conceitos para fixar!
+                </div>
+            `;
+        } else {
+            mensagem = `
+                <div class="highlight warning" style="margin-top: 15px; text-align: left;">
+                    📚 <strong>Que tal revisar os exemplos novamente?</strong> Você acertou ${acertos}/15. Pratique mais!
+                </div>
+            `;
+        }
+        document.getElementById('feedback').innerHTML += mensagem;
+    }
+
+    // ============================================================
+    // FUNÇÕES AUXILIARES
+    // ============================================================
+    function marcarOpcao(questionId, gabaritoValor) {
+        const options = document.getElementById(questionId).querySelectorAll('.option');
+        options.forEach(opt => {
+            const radio = opt.querySelector('input[type="radio"]');
+            radio.disabled = true;
+            if (radio.value === gabaritoValor) {
+                opt.classList.add('correct');
+            } else if (radio.checked && radio.value !== gabaritoValor) {
+                opt.classList.add('wrong');
+            }
+        });
+    }
+
+    function marcarVF(questionId, gabaritoValor) {
+        const radios = document.querySelectorAll(`input[name="${questionId}"]`);
+        radios.forEach(radio => {
+            radio.disabled = true;
+            const parent = radio.closest('label');
+            if (radio.value === gabaritoValor) {
+                parent.style.color = '#28a745';
+                parent.style.fontWeight = 'bold';
+            } else if (radio.checked && radio.value !== gabaritoValor) {
+                parent.style.color = '#dc3545';
+                parent.style.fontWeight = 'bold';
+            }
+        });
+    }
+
+    // ============================================================
+    // LIMPAR
+    // ============================================================
+    function limparQuiz() {
+        // Limpar radio buttons (múltipla escolha)
+        const radios = document.querySelectorAll('input[type="radio"]');
+        radios.forEach(radio => {
+            radio.checked = false;
+            radio.disabled = false;
+        });
+
+        // Limpar classes das opções
+        const options = document.querySelectorAll('.option');
+        options.forEach(opt => {
+            opt.classList.remove('correct', 'wrong', 'disabled');
+        });
+
+        // Limpar estilos dos V/F
+        const labels = document.querySelectorAll('.question label');
+        labels.forEach(label => {
+            label.style.color = '';
+            label.style.fontWeight = '';
+        });
+
+        document.getElementById('resultado').classList.remove('show');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+</body>
+</html>
